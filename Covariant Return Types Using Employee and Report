@@ -1,0 +1,62 @@
+#include <iostream>
+using namespace std;
+
+class Report {
+public:
+    virtual void display() {
+        cout << "General Report" << endl;
+    }
+};
+
+class FullTimeReport : public Report {
+public:
+    void display() override {
+        cout << "Full Time Employee Report" << endl;
+    }
+};
+
+class ContractReport : public Report {
+public:
+    void display() override {
+        cout << "Contract Employee Report" << endl;
+    }
+};
+
+class Employee {
+public:
+    virtual Report* generateReport() {
+        return new Report();
+    }
+    virtual ~Employee() = default;
+};
+
+class FullTimeEmployee : public Employee {
+public:
+    FullTimeReport* generateReport() override {
+        return new FullTimeReport();
+    }
+};
+
+class ContractEmployee : public Employee {
+public:
+    ContractReport* generateReport() override {
+        return new ContractReport();
+    }
+};
+
+int main() {
+    Employee* e1 = new FullTimeEmployee();
+    Employee* e2 = new ContractEmployee();
+
+    Report* r1 = e1->generateReport();
+    Report* r2 = e2->generateReport();
+
+    r1->display();
+    r2->display();
+
+    delete r1;
+    delete r2;
+    delete e1;
+    delete e2;
+    return 0;
+}
