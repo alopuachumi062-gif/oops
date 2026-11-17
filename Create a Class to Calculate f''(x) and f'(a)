@@ -1,0 +1,36 @@
+#include <iostream>
+using namespace std;
+
+class Function
+{
+public:
+
+    int secondDerivative(int x)
+    {
+        return 24*x + 6;
+    }
+
+    int firstDerivative(int a)
+    {
+        return 12*a*a + 6*a - 5;
+    }
+};
+
+int main()
+{
+    Function f;
+    int a;
+
+    cout << "Enter value of a: ";
+    cin >> a;
+
+    cout << "Second Derivative f''(x) = 24x + 6";
+
+    cout << "\nFirst Derivative f'(" << a << ") = "
+         << f.firstDerivative(a);
+
+    cout << "\nSecond Derivative at x = " << a << " is "
+         << f.secondDerivative(a);
+
+    return 0;
+}
