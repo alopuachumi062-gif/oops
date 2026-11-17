@@ -1,0 +1,97 @@
+#include <iostream>
+#include <cmath>
+using namespace std;
+
+double newton(double n)
+{
+    double x = n, y;
+
+    do
+    {
+        y = (x + n / x) / 2;
+
+        if(abs(y - x) < 0.00001)
+            break;
+
+        x = y;
+
+    } while(true);
+
+    return y;
+}
+
+double secant(double n)
+{
+    double x0 = 1, x1 = n, x2;
+
+    do
+    {
+        x2 = x1 - ((x1*x1 - n) * (x1 - x0)) /
+                   ((x1*x1 - n) - (x0*x0 - n));
+
+        x0 = x1;
+        x1 = x2;
+
+    } while(abs(x1*x1 - n) > 0.00001);
+
+    return x2;
+}
+
+double fixedPoint(double n)
+{
+    double x = n, y;
+
+    do
+    {
+        y = (x + n / x) / 2;
+
+        if(abs(y - x) < 0.00001)
+            break;
+
+        x = y;
+
+    } while(true);
+
+    return y;
+}
+
+int main()
+{
+    int choice;
+    double n;
+
+    cout << "Enter a positive number: ";
+    cin >> n;
+
+    if(n <= 0)
+    {
+        cout << "Enter a number greater than zero.";
+        return 0;
+    }
+
+    cout << "\n1. Newton Raphson Method";
+    cout << "\n2. Secant Method";
+    cout << "\n3. Fixed Point Iteration";
+    cout << "\nEnter your choice: ";
+    cin >> choice;
+
+    switch(choice)
+    {
+        case 1:
+            cout << "Root = " << newton(n);
+            break;
+
+        case 2:
+            cout << "Root = " << secant(n);
+            break;
+
+        case 3:
+            cout << "Root = " << fixedPoint(n);
+            break;
+
+        default:
+            cout << "Invalid choice";
+    }
+
+    return 0;
+}
