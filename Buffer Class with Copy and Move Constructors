@@ -1,0 +1,58 @@
+nclude <iostream>
+#include <utility>
+using namespace std;
+
+class Buffer {
+    int* data;
+    int size;
+
+public:
+    Buffer(int n) : size(n), data(new int[n]{}) {
+        cout << "Constructor called" << endl;
+    }
+
+    Buffer(const Buffer& other) : size(other.size), data(new int[other.size]) {
+        for (int i = 0; i < size; i++)
+            data[i] = other.data[i];
+        cout << "Copy constructor called" << endl;
+    }
+
+    Buffer(Buffer&& other) noexcept
+        : data(other.data), size(other.size) {
+        other.data = nullptr;
+        other.size = 0;
+        cout << "Move constructor called" << endl;
+    }
+
+    void setValues() {
+        for (int i = 0; i < size; i++)
+            data[i] = (i + 1) * 10;
+    }
+
+    void display() const {
+        for (int i = 0; i < size; i++)
+            cout << data[i] << " ";
+        cout << endl;
+    }
+
+    ~Buffer() {
+        delete[] data;
+        cout << "Destructor called" << endl;
+    }
+};
+
+int main() {
+    Buffer b1(3);
+    b1.setValues();
+
+    Buffer b2 = b1;            // Copy
+    Buffer b3 = move(b1);      // Move
+
+    cout << "Copied buffer: ";
+    b2.display();
+
+    cout << "Moved buffer: ";
+    b3.display();
+
+    return 0;
+}
