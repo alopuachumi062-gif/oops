@@ -1,0 +1,27 @@
+#include <iostream>
+using namespace std;
+
+class DatabaseConnection {
+public:
+    DatabaseConnection() {
+        logConnectionStatus();
+    }
+
+    virtual void logConnectionStatus() {
+        cout << "Base Connection Logged" << endl;
+    }
+
+    virtual ~DatabaseConnection() = default;
+};
+
+class SecureConnection : public DatabaseConnection {
+public:
+    void logConnectionStatus() override {
+        cout << "Secure Logged" << endl;
+    }
+};
+
+int main() {
+    SecureConnection connection;
+    return 0;
+}
