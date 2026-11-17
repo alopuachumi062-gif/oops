@@ -1,0 +1,46 @@
+#include <iostream>
+#include <string>
+#include <utility>
+using namespace std;
+
+class Person {
+    string name;
+    int age;
+
+public:
+    Person(string n, int a) : name(n), age(a) {
+        cout << "Parameterized constructor" << endl;
+    }
+
+    Person(const Person& other)
+        : name(other.name), age(other.age) {
+        cout << "Copy constructor" << endl;
+    }
+
+    Person(Person&& other) noexcept
+        : name(move(other.name)), age(other.age) {
+        cout << "Move constructor" << endl;
+        other.age = 0;
+    }
+
+    void display() const {
+        cout << "Name: " << name << ", Age: " << age << endl;
+    }
+};
+
+int main() {
+    Person p1("Amit", 20);
+    Person p2 = p1;             // Copy constructor
+    Person p3 = move(p1);       // Move constructor
+
+    cout << "Original object after move: ";
+    p1.display();
+
+    cout << "Copied object: ";
+    p2.display();
+
+    cout << "Moved object: ";
+    p3.display();
+
+    return 0;
+}
