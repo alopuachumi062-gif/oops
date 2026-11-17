@@ -1,0 +1,52 @@
+#include <iostream>
+using namespace std;
+
+class Array {
+    int* data;
+    int size;
+
+public:
+    Array(int n) {
+        size = n;
+        data = new int[size]{};
+    }
+
+    Array(const Array& other) {
+        size = other.size;
+        data = new int[size];
+        for (int i = 0; i < size; i++)
+            data[i] = other.data[i];
+    }
+
+    void setValues() {
+        for (int i = 0; i < size; i++) {
+            cout << "Enter value " << i + 1 << ": ";
+            cin >> data[i];
+        }
+    }
+
+    void display() const {
+        for (int i = 0; i < size; i++)
+            cout << data[i] << " ";
+        cout << endl;
+    }
+
+    ~Array() {
+        delete[] data;
+    }
+};
+
+int main() {
+    Array a(5);
+    a.setValues();
+
+    Array b = a;   // Copy constructor
+
+    cout << "Original array: ";
+    a.display();
+
+    cout << "Copied array: ";
+    b.display();
+
+    return 0;
+}
