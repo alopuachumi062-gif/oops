@@ -1,0 +1,135 @@
+#include <iostream>
+#include <utility>
+using namespace std;
+
+class Polynomial {
+    int* c;
+    int degree;
+
+public:
+    Polynomial(int d = 0) : degree(d), c(new int[d + 1]{}) {}
+
+    Polynomial(const Polynomial& p) : degree(p.degree), c(new int[p.degree + 1]) {
+        for (int i = 0; i <= degree; i++)
+            c[i] = p.c[i];
+    }
+
+    Polynomial(Polynomial&& p) noexcept : c(p.c), degree(p.degree) {
+        p.c = nullptr;
+        p.degree = -1;
+    }
+
+    Polynomial& operator=(const Polynomial& p) {
+        if (this != &p) {
+            int* temp = new int[p.degree + 1];
+            for (int i = 0; i <= p.degree; i++)
+                temp[i] = p.c[i];
+            delete[] c;
+            c = temp;
+            degree = p.degree;
+        }
+        return *this;
+    }
+
+    Polynomial& operator=(Polynomial&& p) noexcept {
+        if (this != &p) {
+            delete[] c;
+            c = p.c;
+            degree = p.degree;
+            p.c = nullptr;
+            p.degree = -1;
+        }
+        return *this;
+    }
+
+    void input() {
+        for (int i = 0; i <= degree; i++) {
+            cout << "Coefficient of x^" << i << ": ";
+            cin >> c[i];
+        }
+    }
+
+    void display() const {
+        for (int i = degree; i >= 0; i--) {
+            cout << c[i];
+            if (i > 0) cout << "x^" << i << " + ";
+        }
+        cout << endl;
+    }
+
+    static Polynomial add(const Polynomial& a, const Polynomial& b) {
+        int d = (a.degree > b.degree) ? a.degree : b.degree;
+        Polynomial r(d);
+        for (int i = 0; i <= d; i++) {
+            int x = (i <= a.degree) ? a.c[i] : 0;
+            int y = (i <= b.degree) ? b.c[i] : 0;
+            r.c[i] = x + y;
+        }
+        return r;
+    }
+
+    static Polynomial subtract(const Polynomial& a, const Polynomial& b) {
+        int d = (a.degree > b.degree) ? a.degree : b.degree;
+        Polynomial r(d);
+        for (int i = 0; i <= d; i++) {
+            int x = (i <= a.degree) ? a.c[i] : 0;
+            int y = (i <= b.degree) ? b.c[i] : 0;
+            r.c[i] = x - y;
+        }
+        return r;
+    }
+
+    static Polynomial multiply(const Polynomial& a, const Polynomial& b) {
+        Polynomial r(a.degree + b.degree);
+        for (int i = 0; i <= a.degree; i++)
+            for (int j = 0; j <= b.degree; j++)
+                r.c[i + j] += a.c[i] * b.c[j];
+        return r;
+    }
+
+    ~Polynomial() {
+        delete[] c;
+    }
+};
+
+int main() {
+    int d1, d2, choice;
+    cout << "Enter degree of first polynomial: ";
+    cin >> d1;
+    cout << "Enter degree of second polynomial: ";
+    cin >> d2;
+
+    if (d1 < 0 || d2 < 0) {
+        cout << "Invalid degree" << endl;
+        return 0;
+    }
+
+    Polynomial p1(d1), p2(d2);
+    cout << "Enter first polynomial coefficients:\n";
+    p1.input();
+    cout << "Enter second polynomial coefficients:\n";
+    p2.input();
+
+    do {
+        cout << "\n1. Addition\n2. Subtraction\n3. Multiplication\n0. Exit\nChoice: ";
+        cin >> choice;
+
+        if (choice == 1) {
+            Polynomial r = Polynomial::add(p1, p2);
+            cout << "Sum: ";
+            r.display();
+        } else if (choice == 2) {
+            Polynomial r = Polynomial::subtract(p1, p2);
+            cout << "Difference: ";
+            r.display();
+        } else if (choice == 3) {
+            Polynomial r = Polynomial::multiply(p1, p2);
+            cout << "Product: ";
+            r.display();
+        } else if (choice != 0) {
+            cout << "Invalid choice" << endl;
+        }
+    } while (choice != 0);
+
+    return 0;
+}
