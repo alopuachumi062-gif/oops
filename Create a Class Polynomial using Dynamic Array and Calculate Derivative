@@ -1,0 +1,74 @@
+#include <iostream>
+using namespace std;
+
+class Polynomial
+{
+    int degree;
+    int *coeff;
+
+public:
+
+    Polynomial(int d, int c[])
+    {
+        degree = d;
+        coeff = new int[degree + 1];
+
+        for(int i = 0; i <= degree; i++)
+        {
+            coeff[i] = c[i];
+        }
+    }
+
+    void display()
+    {
+        for(int i = degree; i >= 0; i--)
+        {
+            cout << coeff[i];
+
+            if(i > 1)
+                cout << "x^" << i;
+            else if(i == 1)
+                cout << "x";
+
+            if(i != 0)
+                cout << " + ";
+        }
+    }
+
+    void derivative()
+    {
+        cout << "\nDerivative = ";
+
+        for(int i = degree; i >= 1; i--)
+        {
+            cout << coeff[i] * i;
+
+            if(i > 2)
+                cout << "x^" << i-1;
+            else if(i == 2)
+                cout << "x";
+
+            if(i != 1)
+                cout << " + ";
+        }
+    }
+
+    ~Polynomial()
+    {
+        delete[] coeff;
+    }
+};
+
+int main()
+{
+    int c[] = {7, 2, 5, 3};
+
+    Polynomial p(3, c);
+
+    cout << "Original Polynomial = ";
+    p.display();
+
+    p.derivative();
+
+    return 0;
+}
