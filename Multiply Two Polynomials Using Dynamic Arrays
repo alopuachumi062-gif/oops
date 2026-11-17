@@ -1,0 +1,71 @@
+#include <iostream>
+using namespace std;
+
+class Polynomial {
+    int* coeff;
+    int degree;
+
+public:
+    Polynomial(int d) : degree(d), coeff(new int[d + 1]{}) {}
+
+    void input() {
+        cout << "Enter coefficients from constant term to highest power:\n";
+        for (int i = 0; i <= degree; i++) {
+            cout << "Coefficient of x^" << i << ": ";
+            cin >> coeff[i];
+        }
+    }
+
+    void display() const {
+        for (int i = degree; i >= 0; i--) {
+            cout << coeff[i];
+            if (i > 0) cout << "x^" << i << " + ";
+        }
+        cout << endl;
+    }
+
+    static Polynomial multiply(const Polynomial& a, const Polynomial& b) {
+        Polynomial result(a.degree + b.degree);
+        for (int i = 0; i <= a.degree; i++)
+            for (int j = 0; j <= b.degree; j++)
+                result.coeff[i + j] += a.coeff[i] * b.coeff[j];
+        return result;
+    }
+
+    ~Polynomial() {
+        delete[] coeff;
+    }
+
+    Polynomial(const Polynomial&) = delete;
+    Polynomial& operator=(const Polynomial&) = delete;
+    Polynomial(Polynomial&& other) noexcept
+        : coeff(other.coeff), degree(other.degree) {
+        other.coeff = nullptr;
+        other.degree = -1;
+    }
+};
+
+int main() {
+    int d1, d2;
+    cout << "Enter degree of first polynomial: ";
+    cin >> d1;
+    cout << "Enter degree of second polynomial: ";
+    cin >> d2;
+
+    if (d1 < 0 || d2 < 0) {
+        cout << "Degree cannot be negative." << endl;
+        return 0;
+    }
+
+    Polynomial p1(d1), p2(d2);
+    cout << "First polynomial:\n";
+    p1.input();
+    cout << "Second polynomial:\n";
+    p2.input();
+
+    Polynomial result = Polynomial::multiply(p1, p2);
+    cout << "Product: ";
+    result.display();
+
+    return 0;
+}
