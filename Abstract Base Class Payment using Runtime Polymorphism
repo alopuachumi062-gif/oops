@@ -1,0 +1,54 @@
+#include <iostream>
+using namespace std;
+
+class Payment
+{
+public:
+    virtual void processPayment(double amount) = 0;
+};
+
+class CreditCardPayment : public Payment
+{
+public:
+    void processPayment(double amount)
+    {
+        cout << "Credit Card Payment: " << amount << endl;
+    }
+};
+
+class PayPalPayment : public Payment
+{
+public:
+    void processPayment(double amount)
+    {
+        cout << "PayPal Payment: " << amount << endl;
+    }
+};
+
+class BitcoinPayment : public Payment
+{
+public:
+    void processPayment(double amount)
+    {
+        cout << "Bitcoin Payment: " << amount << endl;
+    }
+};
+
+void executeTransaction(Payment* paymentMethod,
+                        double amount)
+{
+    paymentMethod->processPayment(amount);
+}
+
+int main()
+{
+    CreditCardPayment c;
+    PayPalPayment p;
+    BitcoinPayment b;
+
+    executeTransaction(&c, 1000);
+    executeTransaction(&p, 2000);
+    executeTransaction(&b, 3000);
+
+    return 0;
+}
